@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 class Bogie {
     private String name;
@@ -26,32 +25,22 @@ class Bogie {
 public class TrainConsistApp {
     public static void main(String[] args) {
 
-        // Step 1: Create Bogie List (reuse from previous UC)
+        // Step 1: Reuse Bogie List
         List<Bogie> bogieList = new ArrayList<>();
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 56));
-        bogieList.add(new Bogie("Sleeper", 70));     // Duplicate type
         bogieList.add(new Bogie("First Class", 24));
-        bogieList.add(new Bogie("AC Chair", 60));    // Duplicate type
 
-        // Step 2: Group using Stream + groupingBy
-        Map<String, List<Bogie>> groupedBogies = bogieList.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
+        // Step 2: Stream → map → reduce
+        int totalSeats = bogieList.stream()
+                .map(b -> b.getCapacity())   // Extract capacity
+                .reduce(0, Integer::sum);    // Aggregate sum
 
-        // Step 3: Display Grouped Result
-        System.out.println("Grouped Bogies by Type:\n");
-
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            System.out.println("Type: " + entry.getKey());
-
-            for (Bogie b : entry.getValue()) {
-                b.display();
-            }
-            System.out.println();
-        }
+        // Step 3: Display Result
+        System.out.println("Total Seating Capacity of Train: " + totalSeats);
 
         // Step 4: Verify Original List
-        System.out.println("Original Bogie List (Unchanged):");
+        System.out.println("\nOriginal Bogie List:");
         for (Bogie b : bogieList) {
             b.display();
         }
